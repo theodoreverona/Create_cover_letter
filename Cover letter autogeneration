@@ -1,0 +1,64 @@
+from docx import Document
+from docx.shared import Pt, Inches
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+import os
+from datetime import date
+
+def create_word_document(name, address, email, phone, company_name):
+    # Create a new Word document
+    doc = Document()
+
+    # Access the first section of the document
+    section = doc.sections[0]
+
+    # Increase the left and right margins (adjust the values as needed)
+    section.left_margin = Inches(.5)
+    section.right_margin = Inches(.5)
+
+    # Set document properties (optional)
+    doc.core_properties.author = name
+
+    # Add content to the document
+    paragraph = doc.add_paragraph()
+    paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+
+    # Add your name
+    run = paragraph.add_run(f"Name: {name}")
+    run.font.size = Pt(11)
+
+    # Add the date
+    current_date = date.today().strftime("%B %d, %Y")
+    paragraph.add_run(f"\n{current_date}").font.size = Pt(11)
+
+    # Add the address
+    paragraph.add_run(f"\n{address}").font.size = Pt(11)
+    paragraph.add_run(f"\n{email}").font.size = Pt(11)
+    paragraph.add_run(f"\n{phone}").font.size = Pt(11)
+
+    # Create a new paragraph for the greeting
+    greeting_paragraph = doc.add_paragraph()
+    greeting_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+    # Add the greeting line
+    greeting_paragraph.add_run(f"Dear {company_name} Hiring Staff,").font.size = Pt(11)
+
+    # Add a new paragraph for the introduction
+    intro_paragraph = doc.add_paragraph()
+    intro_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+    # Add intro paragraph
+    intro_paragraph.add_run("I am a recent graduate of Thunderbird School of Global Management (M.B.A) and Fullstack Academy (Certificate of Completion, Cyber Security). My areas of academic focus are in International Finance, Security (both physical and digital), Energy Policy and International Development").font.size = Pt(11)
+
+    # Specify the folder path
+    folder_path = "/Users/theod/Desktop/Resume and Cover Letter"
+
+    # Create the folder if it doesn't exist
+    os.makedirs(folder_path, exist_ok=True)
+
+    # Save the document to the specified folder
+    file_path = os.path.join(folder_path, "Cover_Letter.docx")
+    doc.save(file_path)
+    print("Word document created successfully!")
+
+# Call the function with your desired inputs
+create_word_document("Name", "Your address", "your email", "your phone number", "ABC Company")
